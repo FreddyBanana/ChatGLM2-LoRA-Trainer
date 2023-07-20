@@ -77,7 +77,7 @@ def get_dataset(args):
     if args.DATA_TYPE == "json":
         dataset = load_dataset("json", data_files=args.DATA_PATH)
     elif args.DATA_TYPE == "txt":
-        dataset = load_dataset("txt", data_files=args.DATA_PATH)
+        dataset = load_dataset("text", data_files=args.DATA_PATH)
 
     return dataset
 
