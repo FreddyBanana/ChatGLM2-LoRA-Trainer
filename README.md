@@ -91,7 +91,7 @@ json文件格式如下：
 
 The JSON file format is as follows：
 
-```json
+```
 {"context":question1, "target":answer1}{"context":question2, "target":answer2}...
 ```
 
