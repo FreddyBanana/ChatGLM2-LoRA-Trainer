@@ -12,7 +12,7 @@ def get_model_and_tokenizer(model_name, config):
         trust_remote_code=True,
     )
     tokenizer = AutoTokenizer.from_pretrained(
-        model_name, trust_remote_code=True
+        model_name, trust_remote_code=True, add_eos_token=True
     )
     # tokenizer.pad_token = tokenizer.eos_token
     # tokenizer.pad_token_id = tokenizer.eos_token_id
