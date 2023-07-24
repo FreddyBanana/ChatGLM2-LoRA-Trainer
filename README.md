@@ -2,9 +2,9 @@
 
 ### 简介 / Introduction
 
-本仓库利用[peft](https://github.com/huggingface/peft)库与transformers.Trainer，实现对ChatGLM/ChatGLM2的简单8bit LoRA微调。（其它LLM应该也行，只要稍作修改）
+本仓库利用[peft](https://github.com/huggingface/peft)库与transformers.Trainer，实现对ChatGLM2的简单8bit LoRA微调。（其它LLM应该也行，只要稍作修改）
 
-This repo uses [peft](https://github.com/huggingface/peft) and transformers.Trainer to achieve simple 8-bit LoRA fine-tuning for ChatGLM/ChatGLM2. （You can also use this repo for other LLM with minor modifications）
+This repo uses [peft](https://github.com/huggingface/peft) and transformers.Trainer to achieve simple 8-bit LoRA fine-tuning for ChatGLM2. （You can also use this repo for other LLM with minor modifications）
 
 
 
