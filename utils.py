@@ -12,10 +12,8 @@ def get_model_and_tokenizer(model_name, config):
         trust_remote_code=True,
     )
     tokenizer = AutoTokenizer.from_pretrained(
-        model_name, trust_remote_code=True, add_eos_token=True
+        model_name, trust_remote_code=True
     )
-    # tokenizer.pad_token = tokenizer.eos_token
-    # tokenizer.pad_token_id = tokenizer.eos_token_id
 
     model = prepare_model_for_int8_training(model)
     model = get_peft_model(model, config)
@@ -24,13 +22,34 @@ def get_model_and_tokenizer(model_name, config):
     return model, tokenizer
 
 
+def my_tokenizer(args, tokenizer, prompt):
+    data_slice = tokenizer.encode_plus(
+        prompt,
+        max_length=args.CUTOFF_LEN - 1,
+        padding="max_length"
+    )
+    data_slice['input_ids'].extend([tokenizer.eos_token_id])
+    data_slice['attention_mask'].extend([1])
+    data_slice['position_ids'].extend([data_slice['position_ids'][-1] + 1])
+
+    return data_slice
+
+
 def process_data(args, tokenizer, dataset):
+    # data = dataset.shuffle().map(
+    #     lambda data_point: tokenizer(
+    #         generate_prompt(args, data_point),
+    #         truncation=True,
+    #         max_length=args.CUTOFF_LEN,
+    #         padding="max_length",
+    #     )
+    # )
+
     data = dataset.shuffle().map(
-        lambda data_point: tokenizer(
-            generate_prompt(args, data_point),
-            truncation=True,
-            max_length=args.CUTOFF_LEN,
-            padding="max_length",
+        lambda data_point: my_tokenizer(
+            args,
+            tokenizer,
+            generate_prompt(args, data_point)
         )
     )
 
