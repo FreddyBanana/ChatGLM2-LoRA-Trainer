@@ -48,7 +48,8 @@ def chatglm2_tokenizer(args, tokenizer, prompt):
     data_slice = tokenizer.encode_plus(
         prompt,
         max_length=args.CUTOFF_LEN - 1,
-        padding="max_length"
+        padding="max_length",
+        truncation=True
     )
     data_slice['input_ids'].extend([tokenizer.eos_token_id])
     data_slice['attention_mask'].extend([1])
