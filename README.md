@@ -1,14 +1,14 @@
-## ChatGLM2-LoRA-Trainer
+# ChatGLM2-LoRA-Trainer
 
-### 简介 / Introduction
+## 简介 / Introduction
 
-本仓库利用[peft](https://github.com/huggingface/peft)库与transformers.Trainer，实现对ChatGLM2的简单4-bit/8-bit LoRA微调。（其它LLM应该也行，只要稍作修改）
+本仓库利用[peft](https://github.com/huggingface/peft)库与transformers.Trainer，实现对[ChatGLM2](https://github.com/THUDM/ChatGLM2-6B)的简单4bit/8bit LoRA微调。（其它LLM应该也行，只要稍作修改）
 
-This repo uses [peft](https://github.com/huggingface/peft) and transformers.Trainer to achieve simple 4-bit/8-bit LoRA fine-tuning for ChatGLM2. （You can also use this repo for other LLM with minor modifications）
+This repo uses [peft](https://github.com/huggingface/peft) and transformers.Trainer to achieve simple 4-bit/8-bit LoRA fine-tuning for [ChatGLM2](https://github.com/THUDM/ChatGLM2-6B). （You can also use this repo for other LLM with minor modifications）
 
 
 
-### 安装依赖 / Installing the dependencies
+## 安装依赖 / Installing the dependencies
 
 ```
 $ pip install -r requirement.txt
@@ -33,7 +33,7 @@ scipy
 
 
 
-### 参数/config
+## 参数/config
 
 文件config.py参数如下：
 
@@ -87,7 +87,7 @@ The parameters in config.py are as follows:
 
 
 
-### 数据集文件/Dataset files
+## 数据集文件/Dataset files
 
 ### 1）json
 
@@ -141,9 +141,9 @@ Generate prompt as follows (modifiable)：
 
 
 
-### 使用方法 / Usage
+## 使用方法 / Usage
 
-#### 1）训练/train
+### 1）训练/train
 
 ```
 $ sh train.sh
@@ -170,7 +170,7 @@ python main.py \
 
 
 
-#### 2）推理/inference
+### 2）推理/inference
 
 ```
 $ sh inference.sh
@@ -188,7 +188,7 @@ python inference.py \
 
 
 
-### 参考 / Reference
+## 参考 / Reference
 
 [THUDM/ChatGLM2-6B: ChatGLM2-6B: An Open Bilingual Chat LLM | 开源双语对话语言模型 (github.com)](https://github.com/THUDM/ChatGLM2-6B)
 
