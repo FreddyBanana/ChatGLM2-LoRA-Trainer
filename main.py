@@ -5,7 +5,7 @@ if __name__ == "__main__":
     args = parse_args()
 
     lora_config = get_lora_config(args)
-    model, tokenizer = get_model_and_tokenizer(args.MODEL_NAME, lora_config)
+    model, tokenizer = get_model_and_tokenizer(args, lora_config)
 
     dataset = get_dataset(args)
     data = process_data(args, tokenizer, dataset)

@@ -1,21 +1,43 @@
-from peft import prepare_model_for_int8_training, LoraConfig, get_peft_model
-from transformers import AutoTokenizer, AutoModel
+from peft import prepare_model_for_kbit_training, LoraConfig, get_peft_model
+from transformers import AutoTokenizer, AutoModel, BitsAndBytesConfig
 import transformers
 from datasets import load_dataset
+import torch
 
 
-def get_model_and_tokenizer(model_name, config):
-    model = AutoModel.from_pretrained(
-        model_name,
-        load_in_8bit=True,
-        device_map="auto",
-        trust_remote_code=True,
-    )
+def get_model_and_tokenizer(args, config):
+    if args.BIT_8:
+        model = AutoModel.from_pretrained(
+            args.MODEL_NAME,
+            load_in_8bit=True,
+            device_map="auto",
+            trust_remote_code=True,
+        )
+    elif args.BIT_4:
+        quant_config = BitsAndBytesConfig(
+            load_in_4bit=True,
+            bnb_4bit_use_double_quant=True,
+            bnb_4bit_quant_type="nf4",
+            bnb_4bit_compute_dtype=torch.bfloat16
+        )
+        model = AutoModel.from_pretrained(
+            args.MODEL_NAME,
+            quantization_config=quant_config,
+            device_map="auto",
+            trust_remote_code=True,
+        )
+    else:
+        model = AutoModel.from_pretrained(
+            args.MODEL_NAME,
+            device_map="auto",
+            trust_remote_code=True,
+        )
+
     tokenizer = AutoTokenizer.from_pretrained(
-        model_name, trust_remote_code=True
+        args.MODEL_NAME, trust_remote_code=True
     )
 
-    model = prepare_model_for_int8_training(model)
+    model = prepare_model_for_kbit_training(model)
     model = get_peft_model(model, config)
     model.config.use_cache = False
 

@@ -2,9 +2,9 @@
 
 ### 简介 / Introduction
 
-本仓库利用[peft](https://github.com/huggingface/peft)库与transformers.Trainer，实现对ChatGLM2的简单8bit LoRA微调。（其它LLM应该也行，只要稍作修改）
+本仓库利用[peft](https://github.com/huggingface/peft)库与transformers.Trainer，实现对ChatGLM2的简单4-bit/8-bit LoRA微调。（其它LLM应该也行，只要稍作修改）
 
-This repo uses [peft](https://github.com/huggingface/peft) and transformers.Trainer to achieve simple 8-bit LoRA fine-tuning for ChatGLM2. （You can also use this repo for other LLM with minor modifications）
+This repo uses [peft](https://github.com/huggingface/peft) and transformers.Trainer to achieve simple 4-bit/8-bit LoRA fine-tuning for ChatGLM2. （You can also use this repo for other LLM with minor modifications）
 
 
 
@@ -56,6 +56,8 @@ scipy
 - **PROMPT**，推理时的prompt。
 - **TEMPERATURE**，推理时的温度，调整模型的创造力。
 - **LORA_CHECKPOINT_DIR**，待推理LoRA权重的文件夹位置。
+- **BIT_4**，使用4bit量化+LoRA微调。
+- **BIT_8**，使用8bit量化+LoTA微调。
 
 
 
@@ -80,6 +82,8 @@ The parameters in config.py are as follows:
 - **PROMPT**，your prompt when inference。
 - **TEMPERATURE**，the temperature when inference, adjusting the creativity of LLM。
 - **LORA_CHECKPOINT_DIR**，folder location for LoRA weights to be inferred。
+- **BIT_4**，use 4-bit。
+- **BIT_8**，use 8-bit。
 
 
 
@@ -159,7 +163,8 @@ python main.py \
 	--OUTPUT_DIR ./output_model \
 	--DATA_PATH ./new_train.json \
 	--DATA_TYPE json \
-	--SAVE_STEPS 1000
+	--SAVE_STEPS 1000 \
+	--BIT_4
 
 ```
 

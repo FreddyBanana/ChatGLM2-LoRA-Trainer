@@ -19,6 +19,8 @@ def parse_args():
     parser.add_argument('--DATA_TYPE', type=str, choices= ["json" , "txt"], default="json", help='Input file type')
     parser.add_argument('--SAVE_STEPS', type=int, default=1000, help='Save the model according to steps')
     parser.add_argument('--SAVE_TOTAL_LIMIT', type=int, default=3, help='The number of the checkpoint you will save (Excluding the final one)')
+    parser.add_argument('--BIT_8', default=False, action="store_true", help='Use 8-bit')
+    parser.add_argument('--BIT_4', default=False, action="store_true", help='Use 4-bit')
 
     parser.add_argument('--PROMPT', type=str, default="Input your prompt", help='Your prompt when inference')
     parser.add_argument('--TEMPERATURE', type=int, default=0, help='Temperature when inference')

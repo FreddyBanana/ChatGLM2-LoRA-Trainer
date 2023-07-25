@@ -9,4 +9,5 @@ python main.py \
 	--OUTPUT_DIR ./output_model \
 	--DATA_PATH ./new_train.json \
 	--DATA_TYPE json \
-	--SAVE_STEPS 1000
+	--SAVE_STEPS 1000 \
+	--BIT_4
