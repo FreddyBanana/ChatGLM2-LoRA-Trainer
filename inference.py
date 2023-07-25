@@ -1,15 +1,40 @@
 from config import parse_args
-from transformers import AutoModel
+from transformers import AutoModel, BitsAndBytesConfig
 from transformers import AutoTokenizer
 from peft import PeftModel
 import torch
 
-
 if __name__ == "__main__":
     args = parse_args()
-    model = AutoModel.from_pretrained(args.MODEL_NAME, trust_remote_code=True, load_in_8bit=False,
-                                      device_map='auto')
     tokenizer = AutoTokenizer.from_pretrained(args.MODEL_NAME, trust_remote_code=True)
+
+    if args.BIT_8:
+        model = AutoModel.from_pretrained(
+            args.MODEL_NAME,
+            load_in_8bit=True,
+            device_map="auto",
+            trust_remote_code=True,
+        )
+    elif args.BIT_4:
+        quant_config = BitsAndBytesConfig(
+            load_in_4bit=True,
+            bnb_4bit_use_double_quant=True,
+            bnb_4bit_quant_type="nf4",
+            bnb_4bit_compute_dtype=torch.bfloat16
+        )
+        model = AutoModel.from_pretrained(
+            args.MODEL_NAME,
+            quantization_config=quant_config,
+            device_map="auto",
+            trust_remote_code=True,
+        )
+    else:
+        model = AutoModel.from_pretrained(
+            args.MODEL_NAME,
+            device_map="auto",
+            trust_remote_code=True,
+        )
+
     model = PeftModel.from_pretrained(model, args.LORA_CHECKPOINT_DIR)
 
     with torch.no_grad():

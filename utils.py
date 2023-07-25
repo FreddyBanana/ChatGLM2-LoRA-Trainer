@@ -44,7 +44,7 @@ def get_model_and_tokenizer(args, config):
     return model, tokenizer
 
 
-def my_tokenizer(args, tokenizer, prompt):
+def chatglm2_tokenizer(args, tokenizer, prompt):
     data_slice = tokenizer.encode_plus(
         prompt,
         max_length=args.CUTOFF_LEN - 1,
@@ -58,22 +58,23 @@ def my_tokenizer(args, tokenizer, prompt):
 
 
 def process_data(args, tokenizer, dataset):
-    # data = dataset.shuffle().map(
-    #     lambda data_point: tokenizer(
-    #         generate_prompt(args, data_point),
-    #         truncation=True,
-    #         max_length=args.CUTOFF_LEN,
-    #         padding="max_length",
-    #     )
-    # )
-
-    data = dataset.shuffle().map(
-        lambda data_point: my_tokenizer(
-            args,
-            tokenizer,
-            generate_prompt(args, data_point)
+    if args.MODEL_NAME == "THUDM/chatglm2-6b":
+        data = dataset.shuffle().map(
+            lambda data_point: chatglm2_tokenizer(
+                args,
+                tokenizer,
+                generate_prompt(args, data_point)
+            )
         )
-    )
+    else:
+        data = dataset.shuffle().map(
+            lambda data_point: tokenizer(
+                generate_prompt(args, data_point),
+                truncation=True,
+                max_length=args.CUTOFF_LEN,
+                padding="max_length",
+            )
+        )
 
     return data
 
@@ -138,4 +139,3 @@ def generate_prompt(args, data_point):
 
 ### 
 {data_point["text"]}"""
-
