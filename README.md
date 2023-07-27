@@ -185,11 +185,11 @@ inference.sh：
 
 ```shell
 python inference.py \
-	--CUTOFF_LEN 256 \
+	--CONTEXT_LEN 256 \
 	--MODEL_NAME THUDM/chatglm2-6b \
 	--LORA_CHECKPOINT_DIR ./output_model/checkpoint-4000/ \
 	--BIT_4 \
-	--PROMPT put your prompt here
+	--PROMPT "put your prompt here"
 ```
 
 
