@@ -42,7 +42,7 @@ if __name__ == "__main__":
         input_ids = torch.LongTensor([ids])
         out = model.generate(
             input_ids=input_ids,
-            max_length=args.CUTOFF_LEN,
+            max_length=args.CONTEXT_LEN,
             do_sample=False,
             temperature=args.TEMPERATURE
         )

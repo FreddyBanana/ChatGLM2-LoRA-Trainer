@@ -1,6 +1,6 @@
-## ChatGLM2-LoRA-Trainer
+# ChatGLM2-LoRA-Trainer
 
-### 简介 / Introduction
+## 简介 / Introduction
 
 本仓库利用[peft](https://github.com/huggingface/peft)库与transformers.Trainer，实现对[ChatGLM2](https://github.com/THUDM/ChatGLM2-6B)的简单4-bit/8-bit LoRA微调。（其它LLM应该也行，只要稍作修改）
 
@@ -8,7 +8,7 @@ This repo uses [peft](https://github.com/huggingface/peft) and transformers.Trai
 
 
 
-### 安装依赖 / Installing the dependencies
+## 安装依赖 / Installing the dependencies
 
 ```
 $ pip install -r requirement.txt
@@ -33,7 +33,7 @@ scipy
 
 
 
-### 参数/config
+## 参数/config
 
 文件config.py参数如下：
 
@@ -42,7 +42,9 @@ scipy
 - **EPOCHS**，总训练代数。
 - **WARMUP_STEPS**，预热步数。
 - **LEARNING_RATE**，学习率。
-- **CUTOFF_LEN**，tokenizer截断长度。
+- **CONTEXT_LEN**，context字段截断长度（对应json文件的context）。
+- **TARGET_LEN**，target字段截断长度（对应json文件的target）。
+- **TEXT_LEN**，text字段截断长度（对应txt文件的文本）。
 - **LORA_R**，LoRA低秩的秩数。
 - **LORA_ALPHA**，LoRA的alpha。
 - **LORA_DROPOUT**，LoRA层的Dropout率。
@@ -57,7 +59,7 @@ scipy
 - **TEMPERATURE**，推理时的温度，调整模型的创造力。
 - **LORA_CHECKPOINT_DIR**，待推理LoRA权重的文件夹位置。
 - **BIT_4**，使用4bit量化+LoRA微调。
-- **BIT_8**，使用8bit量化+LoTA微调。
+- **BIT_8**，使用8bit量化+LoRA微调。
 
 
 
@@ -68,10 +70,12 @@ The parameters in config.py are as follows:
 - **EPOCHS**，training epochs。
 - **WARMUP_STEPS**，warmup steps。
 - **LEARNING_RATE**，learning rate of fine-tuning。
-- **CUTOFF_LEN**，truncation length of tokenizer。
-- **LORA_R**，Lora low rank。
-- **LORA_ALPHA**，Lora Alpha。
-- **LORA_DROPOUT**，Lora dropout。
+- **CONTEXT_LEN**，truncation length of context (in json)。
+- **TARGET_LEN**，truncation length of target (in json)。
+- **TEXT_LEN**，truncation length of text (in txt)。
+- **LORA_R**，LoRA low rank。
+- **LORA_ALPHA**，LoRA Alpha。
+- **LORA_DROPOUT**，LoRA dropout。
 - **MODEL_NAME**，model name (huggingface repo address)。
 - **LOGGING_STEPS**，the number of interval steps for outputting loss during training。
 - **OUTPUT_DIR**，the storage folder location for LoRA weights。
@@ -87,7 +91,7 @@ The parameters in config.py are as follows:
 
 
 
-### 数据集文件/Dataset files
+## 数据集文件/Dataset files
 
 ### 1）json
 
@@ -141,9 +145,9 @@ Generate prompt as follows (modifiable)：
 
 
 
-### 使用方法 / Usage
+## 使用方法 / Usage
 
-#### 1）训练/train
+### 1）训练/train
 
 ```
 $ sh train.sh
@@ -157,7 +161,8 @@ python main.py \
 	--BATCH_SIZE 16 \
 	--EPOCHS 50 \
 	--LEARNING_RATE 2e-5 \
-	--CUTOFF_LEN 256 \
+	--CONTEXT_LEN 64 \
+	--TARGET_LEN 192 \
 	--LORA_R 16 \
 	--MODEL_NAME THUDM/chatglm2-6b \
 	--OUTPUT_DIR ./output_model \
@@ -170,7 +175,7 @@ python main.py \
 
 
 
-#### 2）推理/inference
+### 2）推理/inference
 
 ```
 $ sh inference.sh
@@ -189,10 +194,18 @@ python inference.py \
 
 
 
-### 参考 / Reference
+## 参考 / Reference
 
 [THUDM/ChatGLM2-6B: ChatGLM2-6B: An Open Bilingual Chat LLM | 开源双语对话语言模型 (github.com)](https://github.com/THUDM/ChatGLM2-6B)
 
 [Fine_Tuning_LLama | Kaggle](https://www.kaggle.com/code/gunman02/fine-tuning-llama?scriptVersionId=128204744)
 
 [mymusise/ChatGLM-Tuning: 一种平价的chatgpt实现方案, 基于ChatGLM-6B + LoRA (github.com)](https://github.com/mymusise/ChatGLM-Tuning/tree/master)
+
+
+
+## 更新日志/ChangeLog
+
+- [2023/07/27]：对于QA的训练，更新loss的计算目标，只计算问题部分（json里面的target字段）的loss。
+- [2023/07/25]：添加4-bit量化LoRA训练。
+- [2023/07/24]：添加eos_token_id，解决重复输出的问题。

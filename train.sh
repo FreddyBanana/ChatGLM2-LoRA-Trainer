@@ -3,7 +3,8 @@ python main.py \
 	--BATCH_SIZE 16 \
 	--EPOCHS 50 \
 	--LEARNING_RATE 2e-5 \
-	--CUTOFF_LEN 256 \
+	--CONTEXT_LEN 64 \
+	--TARGET_LEN 192 \
 	--LORA_R 16 \
 	--MODEL_NAME THUDM/chatglm2-6b \
 	--OUTPUT_DIR ./output_model \
