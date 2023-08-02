@@ -1,4 +1,4 @@
-from peft import prepare_model_for_kbit_training, LoraConfig, get_peft_model
+from peft import prepare_model_for_kbit_training, LoraConfig, get_peft_model, TaskType
 from transformers import AutoTokenizer, AutoModel, BitsAndBytesConfig
 import transformers
 from datasets import load_dataset
@@ -55,7 +55,7 @@ def chatglm2_tokenizer(args, tokenizer, data_point):
         data_slice_target = tokenizer.encode_plus(
             data_point["target"],
             max_length=args.TARGET_LEN,
-            padding="max_length",
+            padding=False,
             truncation=True
         )
 
@@ -65,11 +65,13 @@ def chatglm2_tokenizer(args, tokenizer, data_point):
 
         data_slice = {}
         data_slice['input_ids'] = data_slice_source['input_ids'] + data_slice_target['input_ids'] + [
-            tokenizer.eos_token_id]
-        data_slice['attention_mask'] = data_slice_source['attention_mask'] + data_slice_target['attention_mask'] + [1]
+            tokenizer.eos_token_id] + [0] * (args.TARGET_LEN - len(data_slice_target['input_ids']))
+        data_slice['attention_mask'] = data_slice_source['attention_mask'] + data_slice_target['attention_mask'] + [
+            1] + [0] * (args.TARGET_LEN - len(data_slice_target['input_ids']))
         data_slice['position_ids'] = data_slice_source['position_ids'] + data_slice_target['position_ids'] + [
-            data_slice_target['position_ids'][-1] + 1]
-        data_slice['label'] = [-100] * args.CONTEXT_LEN + data_slice_target['input_ids'] + [-100]
+            data_slice_target['position_ids'][-1] + 1] + [0] * (args.TARGET_LEN - len(data_slice_target['input_ids']))
+        data_slice['label'] = [-100] * args.CONTEXT_LEN + data_slice_target['input_ids'] + [tokenizer.eos_token_id] + [
+            -100] * (args.TARGET_LEN - len(data_slice_target['input_ids']))
 
     elif args.DATA_TYPE == "txt":
         data_slice = tokenizer.encode_plus(
@@ -124,8 +126,8 @@ def get_lora_config(args):
         r=args.LORA_R,
         lora_alpha=args.LORA_ALPHA,
         lora_dropout=args.LORA_DROPOUT,
-        bias='none',
-        task_type='CAUSAL_LM',
+        task_type=TaskType.CAUSAL_LM,
+        target_modules=["query_value_key", "dense", "dense_4h_to_h", "dense_h_to_4h"]
     )
 
     return config

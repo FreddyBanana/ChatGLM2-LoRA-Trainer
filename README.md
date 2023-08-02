@@ -206,6 +206,7 @@ python inference.py \
 
 ## 更新日志/ChangeLog
 
+- [2023/08/02]：更新了LoraConfig的target_modules。
 - [2023/07/27]：对于QA的训练，更新loss的计算目标，只计算问题部分（json里面的target字段）的loss。
 - [2023/07/25]：添加4-bit量化LoRA训练。
 - [2023/07/24]：添加eos_token_id，解决重复输出的问题。
