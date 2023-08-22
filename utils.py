@@ -88,7 +88,7 @@ def chatglm2_tokenizer(args, tokenizer, data_point):
 
 
 def process_data(args, tokenizer, dataset):
-    if args.MODEL_NAME == "THUDM/chatglm2-6b":
+    if args.IF_CHATGLM2:
         data = dataset.shuffle().map(
             lambda data_point: chatglm2_tokenizer(
                 args,
@@ -143,7 +143,7 @@ class chatglm2_trainer(transformers.Trainer):
 
 def get_trainer(args, model, data, tokenizer):
     GRADIENT_ACCUMULATION_STEPS = args.BATCH_SIZE // args.MICRO_BATCH_SIZE
-    if args.MODEL_NAME == "THUDM/chatglm2-6b":
+    if args.IF_CHATGLM2:
         trainer = chatglm2_trainer(
             model=model,
             train_dataset=data['train'],
