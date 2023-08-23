@@ -70,7 +70,7 @@ def chatglm2_tokenizer(args, tokenizer, data_point):
             1] + [0] * (args.TARGET_LEN - len(data_slice_target['input_ids']))
         data_slice['position_ids'] = data_slice_source['position_ids'] + data_slice_target['position_ids'] + [
             data_slice_target['position_ids'][-1] + 1] + [0] * (args.TARGET_LEN - len(data_slice_target['input_ids']))
-        data_slice['label'] = [-100] * args.CONTEXT_LEN + data_slice_target['input_ids'] + [tokenizer.eos_token_id] + [
+        data_slice['labels'] = [-100] * args.CONTEXT_LEN + data_slice_target['input_ids'] + [tokenizer.eos_token_id] + [
             -100] * (args.TARGET_LEN - len(data_slice_target['input_ids']))
 
     elif args.DATA_TYPE == "txt":
