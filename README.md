@@ -103,20 +103,6 @@ The JSON file format is as follows：
 {"context":question1, "target":answer1}{"context":question2, "target":answer2}...
 ```
 
-生成prompt如下（可修改）：
-
-Generate prompt as follows (modifiable)：
-
-```
-"""Below is an instruction that describes a task. Write a response that appropriately completes the request.
-
-### Instruction: 
-{data_point["context"]}
-
-### Answer: 
-{data_point["target"]}"""
-```
-
 
 
 ### 2）txt
@@ -130,17 +116,6 @@ sentence1
 sentence2
 sentence3
 ...
-```
-
-生成prompt如下（可修改）：
-
-Generate prompt as follows (modifiable)：
-
-```
-"""Below is an instruction that describes a task. Write a response that appropriately completes the request.
-
-### 
-{data_point["text"]}"""
 ```
 
 
